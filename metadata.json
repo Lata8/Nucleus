@@ -1,0 +1,6 @@
+{
+  "name": "Nucleus",
+  "description": "Aplicación local integrada Nucleus para la gestión y control de finanzas en ARS/USD, rutinas físicas en gimnasio, y productividad con Time-Blocking y Modo Enfoque automatizado.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

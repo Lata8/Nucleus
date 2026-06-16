@@ -1,0 +1,42 @@
+{
+  "name": "Nucleus Focus & Habits",
+  "short_name": "Nucleus",
+  "description": "Sistema de enfoque, disciplina y desarrollo personal inspirado en Hábitos Atómicos.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#070b15",
+  "theme_color": "#070b15",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;850&family=JetBrains+Mono:wght@400;500;750&family=Space+Grotesk:wght@450;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom Bento Grid Color Mapping: Map white and light slate to glowing dark tech-slate tones */
+  --color-white: #0a0f1d;          /* Master card/box background - matches slate-950/900 */
+  --color-slate-50: #030712;       /* Base layout background - deep space black */
+  --color-slate-100: #1e293b;      /* Thin border lines (slate-800 look) */
+  --color-slate-200: #334155;      /* Secondary dark border lines (slate-705 look) */
+  --color-slate-300: #cbd5e1;      /* Crisp visible light-slate text/icons */
+  --color-slate-400: #e2e8f0;      /* Highly legible secondary body text */
+  --color-slate-500: #f1f5f9;      /* Crystal clear text label */
+  --color-slate-600: #ffffff;      /* Perfect high contrast white text */
+  --color-slate-700: #ffffff;      /* Pure white body text */
+  --color-slate-800: #ffffff;      /* Very bright/white titles */
+  --color-slate-900: #ffffff;      /* Pure white titles/headings */
+
+  /* Legacy layout failsafes (Ensures older semantic references are high contrast) */
+  --color-slate-350: #e2e8f0;
+  --color-slate-405: #cbd5e1;
+  --color-slate-450: #cbd5e1;
+  --color-slate-550: #e2e8f0;
+  --color-slate-650: #cbd5e1;
+  --color-slate-655: #818cf8;
+  --color-slate-705: #e2e8f0;
+  --color-slate-750: #334155;
+  --color-slate-805: #1e293b;
+  --color-slate-850: #1e293b;
+
+  /* Invert select Indigo colors for neon sci-fi theme accents */
+  --color-indigo-50: rgba(59, 130, 246, 0.08);
+  --color-indigo-100: rgba(59, 130, 246, 0.15);
+  --color-indigo-150: rgba(59, 130, 246, 0.22);
+  --color-indigo-300: #93c5fd;
+  --color-indigo-400: #60a5fa;
+  --color-indigo-500: #3b82f6;
+  --color-indigo-600: #2563eb;
+  --color-indigo-650: #60a5fa;
+  --color-indigo-900: #1d4ed8;
+  --color-indigo-955: #172554;
+
+  /* Invert Emerald scales for premium tech-status colors */
+  --color-emerald-50: rgba(16, 185, 129, 0.08);
+  --color-emerald-100: rgba(16, 185, 129, 0.15);
+  --color-emerald-600: #10b981;
+  --color-emerald-700: #34d399;
+  --color-emerald-800: #059669;
+
+  /* Form Fields & Input Text color corrections for deep input boxes */
+  --color-slate-950: #030712;
+}
+
+/* Custom Scrollbars for slick dark tech panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Base custom interactive styles with smooth transition defaults */
+input, select, textarea {
+  color-scheme: dark;
+  background-color: #0c1221 !important; /* Elegant dark navy-slate */
+  color: #ffffff !important;           /* Bold pristine white text */
+  border: 1px solid #1e293b !important;
+  border-radius: 12px;
+}
+
+input::placeholder {
+  color: #94a3b8 !important;          /* Crystal clear placeholders */
+  opacity: 0.8;
+}
+
+/* Fix browser auto-fill/yellow backgrounds making text invisible */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0c1221 inset !important;
+  box-shadow: 0 0 0px 1000px #0c1221 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+body {
+  background-color: #030712;
+  color: #e2e8f0;
+}
+
+/* Fallback pure white text rules to bypass the inverted white theme definition */
+.text-white-pure, .text-white {
+  color: #ffffff !important;
+}
+
+
+/* --- ESTILO RICH: Custom Luxury Overrides & Enhancements --- */
+
+/* Royal midnight/aubergine background with gold metallic glows */
+.style-rich {
+  --color-slate-50: #0c081d;
+  --color-white: rgba(22, 15, 42, 0.75);
+}
+
+.style-rich header, .style-rich aside {
+  background: linear-gradient(135deg, #120926 0%, #05020c 100%) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
+}
+
+.style-rich #desktop-sidebar {
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.65);
+}
+
+.style-rich #view-layer {
+  background: radial-gradient(circle at 50% 50%, #1a0b36 0%, #05020d 100%) !important;
+}
+
+/* Main glassmorphic viewport parent with gold/bronze outer borders and rich shadow spreads */
+.style-rich #mockup-frame-parent {
+  background: rgba(21, 13, 44, 0.45) !important;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(245, 158, 11, 0.25) !important; /* Deluxe gold border outline */
+  box-shadow: 0 25px 60px -10px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Rich Mode interactive input overrides */
+.style-rich input, .style-rich select, .style-rich textarea {
+  background-color: rgba(30, 22, 57, 0.85) !important;
+  border-color: rgba(167, 139, 250, 0.3) !important;
+  border-radius: 16px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.style-rich input:focus, .style-rich select:focus, .style-rich textarea:focus {
+  border-color: #d946ef !important; /* Fuchsia glow */
+  box-shadow: 0 0 12px rgba(217, 70, 239, 0.4) !important;
+}
+
+/* Smooth rubber-band springy button actions in Rich Mode */
+.style-rich button:not(.cursor-pointer-disabled) {
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.style-rich button:not(.cursor-pointer-disabled):hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35) !important;
+}
+
+.style-rich button:not(.cursor-pointer-disabled):active {
+  transform: translateY(1px) scale(0.97) !important;
+}
+
+/* Rich Color Accents (Fuchsia/Purple Neon glow defaults for Indigo) */
+.style-rich .text-indigo-400 {
+  color: #d946ef !important; 
+  text-shadow: 0 0 10px rgba(217, 70, 239, 0.35);
+}
+
+.style-rich .border-indigo-400 {
+  border-color: rgba(217, 70, 239, 0.55) !important;
+}
+
+.style-rich .bg-indigo-600 {
+  background: linear-gradient(135deg, #d946ef 0%, #8b5cf6 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 18px rgba(217, 70, 239, 0.4) !important;
+}
+
+.style-rich .bg-indigo-650 {
+  background-color: #d946ef !important;
+}
+
+.style-rich .bg-indigo-955 {
+  background-color: #4a044e !important;
+  color: #f472b6 !important;
+}
+
+/* Luxe Green Accent in Rich Mode */
+.style-rich .text-emerald-400, .style-rich .text-emerald-500 {
+  color: #10b981 !important;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.style-rich .bg-emerald-600 {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.4) !important;
+}
+
+/* Gold/Bronze Solar Accent in Rich Mode */
+.style-rich .text-amber-400, .style-rich .text-amber-500 {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+}
+
+.style-rich .bg-amber-600, .style-rich .bg-amber-500 {
+  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 18px rgba(180, 83, 9, 0.45) !important;
+}
+
+/* Velvet Crimson Accent in Rich Mode */
+.style-rich .text-rose-400, .style-rich .text-rose-500 {
+  color: #f43f5e !important;
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.35);
+}
+
+.style-rich .bg-rose-600 {
+  background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 18px rgba(190, 18, 60, 0.4) !important;
+}
+
+/* Rounded Cards & Premium Containers in Rich Mode */
+.style-rich div.bg-[#0b1323] {
+  background: rgba(28, 20, 52, 0.85) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.style-rich div.bg-[#070c18] {
+  background: rgba(20, 14, 38, 0.95) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
+  border-radius: 22px !important;
+}
+
+.style-rich .border-slate-800, .style-rich .border-slate-800\/80, .style-rich .border-slate-800\/90 {
+  border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Secondary Actions inside Rich Mode */
+.style-rich .bg-slate-100 {
+  background: rgba(88, 28, 135, 0.4) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+  color: #f3e8ff !important;
+}
+
+.style-rich .bg-slate-100:hover {
+  background: rgba(88, 28, 135, 0.6) !important;
+  border-color: rgba(167, 139, 250, 0.4) !important;
+  color: #ffffff !important;
+}
+
+.style-rich .bg-slate-900\/60, .style-rich .bg-slate-900 {
+  background: rgba(24, 16, 44, 0.8) !important;
+}
+
+.style-rich .bg-slate-950 {
+  background-color: #05020c !important;
+}
+
+
