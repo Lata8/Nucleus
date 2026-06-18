@@ -36,7 +36,8 @@ import {
   AlertTriangle,
   CheckCircle2,
   XCircle,
-  Info
+  Info,
+  Utensils
 } from 'lucide-react';
 
 import { 
@@ -75,6 +76,7 @@ import ProductivityModule from './components/ProductivityModule';
 import SettingsModule from './components/SettingsModule';
 import HabitsModule from './components/HabitsModule';
 import JournalModule from './components/JournalModule';
+import NutritionModule from './components/NutritionModule';
 import NucleusLogo from './components/NucleusLogo';
 
 // Error Boundary definition to prevent fatal React DOM rendering crashes from browser translators
@@ -179,7 +181,7 @@ export default function App() {
   });
 
   // Global settings for UI with dynamic SettingsModule bindings
-  const [activeTab, setActiveTab] = useState<'panel' | 'finance' | 'gym' | 'todo' | 'habits' | 'journal' | 'settings'>('panel');
+  const [activeTab, setActiveTab ] = useState<'panel' | 'finance' | 'gym' | 'nutrition' | 'todo' | 'habits' | 'journal' | 'settings'>('panel');
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({
     oficial: 950,
     blue: 1240,
@@ -196,8 +198,14 @@ export default function App() {
   });
 
   const [userName, setUserName] = useState(() => {
-    return localStorage.getItem('control_personal_user_name') || 'Elías';
+    return localStorage.getItem('control_personal_user_name') || '';
   });
+
+  const [showNamePrompt, setShowNamePrompt] = useState(() => {
+    return !localStorage.getItem('control_personal_user_name');
+  });
+
+  const [tempPromptName, setTempPromptName] = useState('');
 
   const [accentColor, setAccentColor] = useState<'indigo' | 'emerald' | 'amber' | 'rose'>(() => {
     return (localStorage.getItem('control_personal_accent_color') as any) || 'indigo';
@@ -604,6 +612,7 @@ export default function App() {
     { id: 'panel', label: 'Panel', icon: Activity },
     { id: 'finance', label: 'Finanzas', icon: DollarSign },
     { id: 'gym', label: 'Deporte', icon: Trophy },
+    { id: 'nutrition', label: 'Nutrición', icon: Utensils },
     { id: 'todo', label: 'Agenda', icon: CalendarDays },
     { id: 'journal', label: 'Bitácora', icon: BookOpen },
     { id: 'settings', label: 'Configuración', icon: SlidersHorizontal },
@@ -695,6 +704,74 @@ export default function App() {
                 </button>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Onboarding Name Prompt Modal */}
+      {showNamePrompt && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-xl z-50 flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-sm bg-[#090e1c] border border-slate-800/80 rounded-2xl shadow-2xl p-6 relative overflow-hidden flex flex-col text-left animate-in zoom-in-95 duration-200"
+            id="onboarding-name-prompt"
+          >
+            {/* Visual background glow decor */}
+            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${
+              accentColor === 'emerald' ? 'from-emerald-500 to-teal-500' :
+              accentColor === 'amber' ? 'from-amber-500 to-yellow-500' :
+              accentColor === 'rose' ? 'from-rose-500 to-pink-500' :
+              'from-indigo-500 to-blue-500'
+            }`} />
+            
+            <div className="mb-4 flex items-center space-x-2.5">
+              <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="text-[9px] font-extrabold text-indigo-400 tracking-wider uppercase block">Configuración Inicial</span>
+                <h2 className="text-base font-black text-white uppercase tracking-tight">¡Te damos la bienvenida!</h2>
+              </div>
+            </div>
+
+            <p className="text-[11.5px] text-slate-300 leading-relaxed mb-4">
+              Para personalizar tu espacio de control personal todo-en-uno, por favor indícanos tu nombre de usuario.
+            </p>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const trimmed = tempPromptName.trim();
+              if (trimmed) {
+                setUserName(trimmed);
+                localStorage.setItem('control_personal_user_name', trimmed);
+                setShowNamePrompt(false);
+              }
+            }} className="space-y-3.5">
+              <div>
+                <label className="text-[9px] uppercase tracking-wider text-slate-400 font-extrabold block mb-1">Nombre de Usuario</label>
+                <input
+                  type="text"
+                  required
+                  value={tempPromptName}
+                  onChange={(e) => setTempPromptName(e.target.value)}
+                  placeholder="Ej: Sofía, Carlos, Elías"
+                  className="w-full bg-[#070c18] border border-slate-800 text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-bold"
+                  autoFocus
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={!tempPromptName.trim()}
+                className={`w-full font-black uppercase tracking-wider text-[10px] py-3 rounded-xl transition-all flex items-center justify-center space-x-2 border shadow-lg ${
+                  tempPromptName.trim()
+                    ? 'cursor-pointer bg-indigo-600 hover:bg-indigo-650 text-white border-indigo-500 active:scale-[0.98]'
+                    : 'bg-slate-900 border-slate-800 text-slate-500 cursor-not-allowed'
+                }`}
+              >
+                <span>Comenzar</span>
+                <UserCheck className="w-3.5 h-3.5" />
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -895,6 +972,7 @@ export default function App() {
               {activeTab === 'panel' ? 'Panel de Control' : 
                activeTab === 'finance' ? 'Gestión de Finanzas' :
                activeTab === 'gym' ? 'Deporte & Atletismo' :
+               activeTab === 'nutrition' ? 'Nutrición & Ingestas' :
                activeTab === 'todo' ? 'Agenda & Tareas' :
                activeTab === 'habits' ? 'Hábitos Diarios' :
                activeTab === 'journal' ? 'Bitácora & Reflexión' : 'Ajustes Integrales'}
@@ -903,6 +981,7 @@ export default function App() {
               {activeTab === 'panel' && 'Vista general del rendimiento del día, ahorros, cotizaciones y accesos rápidos.'}
               {activeTab === 'finance' && 'Controla ingresos extra, gastos opcionales, vencimientos fijos y calendario.'}
               {activeTab === 'gym' && 'Planificación deportiva, salidas de running/bici, marcas personales e hipertrofia.'}
+              {activeTab === 'nutrition' && 'Controla ingestas, peso, agua y optimiza con recomendaciones personalizadas.'}
               {activeTab === 'todo' && 'Bloques de tiempo continuos y lista de pendientes para máxima productividad.'}
               {activeTab === 'habits' && 'Visualiza y registra tus hábitos diarios para mantener constancia.'}
               {activeTab === 'journal' && 'Escribe reflexiones sobre tu día, agradecimientos y metas futuras.'}
@@ -933,7 +1012,7 @@ export default function App() {
                 onClearAllData={handleClearAllData}
                 settings={settings}
                 onUpdateSettings={setSettings}
-                userName={userName}
+                userName={userName || 'Usuario'}
                 tasks={tasks}
                 habits={habits}
                 services={services}
@@ -989,6 +1068,12 @@ export default function App() {
                 onUpdateAppStyle={setAppStyle}
                 userName={userName}
                 onUpdateUserName={setUserName}
+              />
+            )}
+  
+            {activeTab === 'nutrition' && (
+              <NutritionModule
+                accentColor={accentColor}
               />
             )}
   
