@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Globe
 } from 'lucide-react';
+import { customAlert } from '../utils/customAlerts';
 
 interface SettingsModuleProps {
   appName: string;
@@ -65,11 +66,11 @@ export default function SettingsModule({
       localStorage.setItem('user_custom_gemini_key', trimmedKey);
       setCustomKey(trimmedKey);
       setIsSavedKey(true);
-      alert('¡Clave de API de Gemini guardada de forma segura en la memoria de tu navegador!');
+      customAlert('¡Clave de API de Gemini guardada de forma segura en la memoria de tu navegador!', 'success', 'Clave Guardada');
     } else {
       localStorage.removeItem('user_custom_gemini_key');
       setIsSavedKey(false);
-      alert('Clave de API personalizada eliminada. La aplicación volverá a utilizar la clave por defecto del servidor.');
+      customAlert('Clave de API personalizada eliminada. La aplicación volverá a utilizar la clave por defecto del servidor.', 'info', 'Clave Eliminada');
     }
   };
 
@@ -77,7 +78,7 @@ export default function SettingsModule({
     setCustomKey('');
     localStorage.removeItem('user_custom_gemini_key');
     setIsSavedKey(false);
-    alert('Clave de API personalizada eliminada. Volviendo a la clave por defecto del servidor.');
+    customAlert('Clave de API personalizada eliminada. Volviendo a la clave por defecto del servidor.', 'info', 'Clave Eliminada');
   };
 
   const handleSaveBranding = (e: React.FormEvent) => {
@@ -85,7 +86,7 @@ export default function SettingsModule({
     if (!editName.trim() || !editUserName.trim()) return;
     onUpdateAppName(editName.trim());
     onUpdateUserName(editUserName.trim());
-    alert('¡Configuración guardada e identidad actualizada!');
+    customAlert('¡Configuración guardada e identidad actualizada!', 'success', 'Ajustes Guardados');
   };
 
   return (

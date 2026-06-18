@@ -19,6 +19,8 @@ import {
   Pocket
 } from 'lucide-react';
 import { Income, Expense, FixedService, ExchangeRates, AppSettings } from '../types';
+import { getLocalDateString } from '../utils/dateUtils';
+import { customAlert, customConfirm } from '../utils/customAlerts';
 
 interface FinanceModuleProps {
   incomes: Income[];
@@ -54,19 +56,23 @@ export default function FinanceModule({
   // Config & State
   const [activeTab, setActiveTab] = useState<'expenses' | 'incomes' | 'services' | 'savings' | 'charts'>('expenses');
   
+  const todayStr = getLocalDateString();
+  const todayParts = todayStr.split('-');
+  const todayDay = parseInt(todayParts[2], 10) || 15;
+
   // States for new entries
   const [incomeSource, setIncomeSource] = useState('');
   const [incomeAmount, setIncomeAmount] = useState('');
   const [incomeCurrency, setIncomeCurrency] = useState<'ARS' | 'USD'>('ARS');
   const [isSalary, setIsSalary] = useState(false);
-  const [incomeDate, setIncomeDate] = useState('2026-06-08');
+  const [incomeDate, setIncomeDate] = useState(todayStr);
 
   const [expenseDesc, setExpenseDesc] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
   const [expenseCurrency, setExpenseCurrency] = useState<'ARS' | 'USD'>('ARS');
   const [expenseCategory, setExpenseCategory] = useState<Expense['category']>('Comida');
   const [isExpenseOptional, setIsExpenseOptional] = useState(true);
-  const [expenseDate, setExpenseDate] = useState('2026-06-08');
+  const [expenseDate, setExpenseDate] = useState(todayStr);
 
   const [serviceName, setServiceName] = useState('');
   const [serviceAmount, setServiceAmount] = useState('');
@@ -87,12 +93,12 @@ export default function FinanceModule({
   // Auto Calculations (Differentiate between available cash and projected totals)
   const activeIncomes = incomes.filter(inc => {
     if (!inc.date) return true;
-    return inc.date <= '2026-06-08';
+    return inc.date <= todayStr;
   });
 
   const pendingIncomes = incomes.filter(inc => {
     if (!inc.date) return false;
-    return inc.date > '2026-06-08';
+    return inc.date > todayStr;
   });
 
   const totalIncomesARS = activeIncomes.reduce((acc, curr) => {
@@ -250,7 +256,7 @@ export default function FinanceModule({
       targetSavingsCurrency: editSavingsCurrency,
       emergencyFundMonths: settings.emergencyFundMonths,
     });
-    alert('Configuración de Finanzas actualizada con éxito.');
+    customAlert('Configuración de Finanzas actualizada con éxito.', 'success');
   };
 
 
@@ -510,7 +516,13 @@ export default function FinanceModule({
             {/* Weekly Sum cards representing "Cobro por semana" */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3" id="weekly-flow-cards">
               {[1, 2, 3, 4, 5].map((w) => {
-                const isCurrentWeek = w === 2; // June 8 is Week 2
+                let currentWeekNum = 2; // default
+                if (todayDay >= 1 && todayDay <= 7) currentWeekNum = 1;
+                else if (todayDay >= 8 && todayDay <= 14) currentWeekNum = 2;
+                else if (todayDay >= 15 && todayDay <= 21) currentWeekNum = 3;
+                else if (todayDay >= 22 && todayDay <= 28) currentWeekNum = 4;
+                else if (todayDay >= 29 && todayDay <= 30) currentWeekNum = 5;
+                const isCurrentWeek = w === currentWeekNum;
                 const weeklySum = getWeeklySumARS(w);
                 return (
                   <div 
@@ -557,7 +569,7 @@ export default function FinanceModule({
                   const dayIncomes = incomes.filter(inc => inc.date === dateStr);
                   const hasIncomes = dayIncomes.length > 0;
                   const isSelected = incomeDate === dateStr;
-                  const isToday = dayNum === 8;
+                  const isToday = dayNum === todayDay;
 
                   return (
                     <button
@@ -655,7 +667,7 @@ export default function FinanceModule({
                 </div>
                 <div className="flex items-center space-x-2 bg-amber-950/50 border border-amber-500/40 px-2.5 py-1.5 rounded-xl text-amber-300 font-bold font-mono">
                   <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_#f59e0b]"></span>
-                  <span>Día de Hoy (08 Jun)</span>
+                  <span>Día de Hoy ({todayDay} Jun)</span>
                 </div>
               </div>
             </div>
@@ -764,7 +776,7 @@ export default function FinanceModule({
                           {inc.isRecurringSalary && (
                             <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-indigo-950/80 text-indigo-300 border border-indigo-900/40 font-extrabold font-mono">Sueldo</span>
                           )}
-                          {inc.date > '2026-06-08' ? (
+                          {inc.date > todayStr ? (
                             <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-amber-950/80 text-amber-300 border border-amber-900/40 font-bold font-mono">⏳ Programado (${inc.date.split('-')[2]}/{inc.date.split('-')[1]})</span>
                           ) : (
                             <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-emerald-950/80 text-emerald-300 border border-emerald-900/40 font-semibold font-mono">✓ Cobrado (Efectivo)</span>

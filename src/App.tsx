@@ -11,6 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Dumbbell, 
+  Trophy,
   DollarSign, 
   TrendingUp, 
   Briefcase, 
@@ -31,7 +32,11 @@ import {
   Sparkles,
   BookOpen,
   X,
-  LayoutGrid
+  LayoutGrid,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Info
 } from 'lucide-react';
 
 import { 
@@ -48,6 +53,7 @@ import {
 } from './types';
 
 import { getLocalDateString } from './utils/dateUtils';
+import { setDialogHandler, removeDialogHandler, DialogConfig, customAlert, customConfirm } from './utils/customAlerts';
 
 import {
   INITIAL_SETTINGS,
@@ -64,7 +70,7 @@ import {
 // Submodules
 import DashboardModule from './components/DashboardModule';
 import FinanceModule from './components/FinanceModule';
-import GymModule from './components/GymModule';
+import DeporteModule from './components/DeporteModule';
 import ProductivityModule from './components/ProductivityModule';
 import SettingsModule from './components/SettingsModule';
 import HabitsModule from './components/HabitsModule';
@@ -209,6 +215,18 @@ export default function App() {
 
   // Floating notifications banner helper state
   const [activeNotification, setActiveNotification] = useState<{ title: string; body: string } | null>(null);
+
+  // Custom visual dialogues state override (Nucleus OS Alert & Confirm Modal)
+  const [activeDialog, setActiveDialog] = useState<DialogConfig | null>(null);
+
+  useEffect(() => {
+    setDialogHandler((config) => {
+      setActiveDialog(config);
+    });
+    return () => {
+      removeDialogHandler();
+    };
+  }, []);
 
   // Warm up audio context on ANY click in the document to bypass browser autoplay blocks
   useEffect(() => {
@@ -450,7 +468,7 @@ export default function App() {
       isRecurringSalary: false,
     };
     setIncomes([newInc, ...incomes]);
-    alert(`Ingreso Extra registrado: $${amount} ${currency}`);
+    customAlert(`Ingreso Extra registrado: $${amount} ${currency}`, 'success', 'Ingreso Registrado');
   };
 
   const handleAddIncome = (inc: Omit<Income, 'id'>) => {
@@ -491,36 +509,41 @@ export default function App() {
   };
 
   const handleClearAllData = () => {
-    if (window.confirm('¿Estás seguro de que deseas borrar todos los datos actuales? Se vaciarán tus ingresos, gastos, servicios, tareas, rutinas, bloques de tiempo, hábitos y bitácora de reflexión para que puedas configurarlo todo desde cero.')) {
-      setIncomes([]);
-      setExpenses([]);
-      setServices([]);
-      setTasks([]);
-      setTimeBlocks([]);
-      setHabits([]);
-      setJournals([]);
-      setRoutines([
-        { id: 'day-1', dayName: 'Lunes', exercises: [] },
-        { id: 'day-2', dayName: 'Martes', exercises: [] },
-        { id: 'day-3', dayName: 'Miércoles', exercises: [] },
-        { id: 'day-4', dayName: 'Jueves', exercises: [] },
-        { id: 'day-5', dayName: 'Viernes', exercises: [] },
-        { id: 'day-6', dayName: 'Sábado', exercises: [] },
-        { id: 'day-7', dayName: 'Domingo', exercises: [] },
-      ]);
-      setSettings({
-        monthlySalaryARS: 0,
-        hourlySalaryARS: 0,
-        salaryPayDay: 5,
-        targetSavingsGoal: 0,
-        targetSavingsCurrency: 'ARS',
-        emergencyFundMonths: 3,
-        emergencyFundPercent: 5,
-        emergencyFundFrequency: 'semanal',
-        emergencyFundEstimatedIncome: 500000,
-      });
-      alert('Se han borrado todos los datos. ¡Ya puedes empezar a agregar tus propios registros desde cero!');
-    }
+    customConfirm(
+      '¿Estás seguro de que deseas borrar todos los datos actuales? Se vaciarán tus ingresos, gastos, servicios, tareas, rutinas, bloques de tiempo, hábitos y bitácora de reflexión para que puedas configurarlo todo desde cero.',
+      () => {
+        setIncomes([]);
+        setExpenses([]);
+        setServices([]);
+        setTasks([]);
+        setTimeBlocks([]);
+        setHabits([]);
+        setJournals([]);
+        setRoutines([
+          { id: 'day-1', dayName: 'Lunes', exercises: [] },
+          { id: 'day-2', dayName: 'Martes', exercises: [] },
+          { id: 'day-3', dayName: 'Miércoles', exercises: [] },
+          { id: 'day-4', dayName: 'Jueves', exercises: [] },
+          { id: 'day-5', dayName: 'Viernes', exercises: [] },
+          { id: 'day-6', dayName: 'Sábado', exercises: [] },
+          { id: 'day-7', dayName: 'Domingo', exercises: [] },
+        ]);
+        setSettings({
+          monthlySalaryARS: 0,
+          hourlySalaryARS: 0,
+          salaryPayDay: 5,
+          targetSavingsGoal: 0,
+          targetSavingsCurrency: 'ARS',
+          emergencyFundMonths: 3,
+          emergencyFundPercent: 5,
+          emergencyFundFrequency: 'semanal',
+          emergencyFundEstimatedIncome: 500000,
+        });
+        customAlert('Se han borrado todos los datos. ¡Ya puedes empezar a agregar tus propios registros desde cero!', 'success', 'Datos Limpiados');
+      },
+      undefined,
+      'Reiniciar Todos los Datos'
+    );
   };
 
   const formattedSimulatedTime = () => {
@@ -560,6 +583,15 @@ export default function App() {
     }
   };
 
+  const getDialogAccentBtnClass = () => {
+    switch (accentColor) {
+      case 'emerald': return 'bg-emerald-600 hover:bg-[#10b981] shadow-[0_0_12px_rgba(16,185,129,0.25)] text-white';
+      case 'amber': return 'bg-amber-600 hover:bg-[#f59e0b] shadow-[0_0_12px_rgba(245,158,11,0.25)] text-white';
+      case 'rose': return 'bg-rose-600 hover:bg-[#f43f5e] shadow-[0_0_12px_rgba(244,63,94,0.25)] text-white';
+      default: return 'bg-indigo-600 hover:bg-[#6366f1] shadow-[0_0_12px_rgba(99,102,241,0.25)] text-white';
+    }
+  };
+
   const getAppFontFamilyClass = () => {
     switch (fontFamily) {
       case 'mono': return 'font-mono';
@@ -571,7 +603,7 @@ export default function App() {
   const navigationTabs = [
     { id: 'panel', label: 'Panel', icon: Activity },
     { id: 'finance', label: 'Finanzas', icon: DollarSign },
-    { id: 'gym', label: 'Gimnasio', icon: Dumbbell },
+    { id: 'gym', label: 'Deporte', icon: Trophy },
     { id: 'todo', label: 'Agenda', icon: CalendarDays },
     { id: 'journal', label: 'Bitácora', icon: BookOpen },
     { id: 'settings', label: 'Configuración', icon: SlidersHorizontal },
@@ -580,6 +612,93 @@ export default function App() {
   return (
     <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row selection:bg-indigo-500/20 selection:text-white ${getAppFontFamilyClass()} ${appStyle === 'rich' ? 'style-rich' : 'style-ia'}`} id="applet-root">
       
+      {/* Premium Customized Nucleus Dialog Modal */}
+      {activeDialog && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div 
+            onClick={(e) => e.stopPropagation()} 
+            className="w-full max-w-md bg-[#090e1c] border border-slate-800/80 rounded-2xl shadow-2xl p-6 relative overflow-hidden flex flex-col items-center text-center animate-in zoom-in-95 duration-200"
+            id="custom-nucleus-dialog"
+          >
+            {/* Ambient Background Glow matching accent or type */}
+            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${
+              activeDialog.type === 'success' ? 'from-emerald-500 to-teal-500' :
+              activeDialog.type === 'error' ? 'from-rose-500 to-red-500' :
+              activeDialog.type === 'warning' ? 'from-amber-500 to-orange-500' :
+              accentColor === 'emerald' ? 'from-emerald-500 to-teal-500' :
+              accentColor === 'amber' ? 'from-amber-500 to-yellow-500' :
+              accentColor === 'rose' ? 'from-rose-500 to-pink-500' :
+              'from-indigo-500 to-blue-500'
+            }`} />
+
+            {/* Glowing Icon Container */}
+            <div className={`mb-4 p-3 rounded-full ${
+              activeDialog.type === 'success' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
+              activeDialog.type === 'error' ? 'bg-rose-500/10 border border-rose-500/20 text-rose-400' :
+              activeDialog.type === 'warning' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
+              accentColor === 'emerald' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
+              accentColor === 'amber' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
+              accentColor === 'rose' ? 'bg-rose-500/10 border border-rose-500/20 text-rose-400' :
+              'bg-indigo-500/10 border border-indigo-500/20 text-indigo-400'
+            }`}>
+              {activeDialog.type === 'success' && <CheckCircle2 className="w-10 h-10" />}
+              {activeDialog.type === 'error' && <XCircle className="w-10 h-10" />}
+              {activeDialog.type === 'warning' && <AlertTriangle className="w-10 h-10" />}
+              {activeDialog.type === 'info' && <Info className="w-10 h-10" />}
+            </div>
+
+            {/* Title */}
+            <h3 className="text-base font-black text-white uppercase tracking-wider mb-2 font-display">
+              {activeDialog.title}
+            </h3>
+
+            {/* Message Body */}
+            <p className="text-xs text-slate-300 leading-relaxed mb-6 font-sans whitespace-pre-line max-w-sm">
+              {activeDialog.message}
+            </p>
+
+            {/* Actions Footer */}
+            <div className="flex items-center justify-center space-x-3 w-full">
+              {activeDialog.isConfirm ? (
+                <>
+                  <button
+                    onClick={() => {
+                      const cb = activeDialog.onCancel;
+                      setActiveDialog(null);
+                      if (cb) cb();
+                    }}
+                    className="cursor-pointer basis-1/2 px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 transition-all font-sans"
+                  >
+                    {activeDialog.cancelText || 'Cancelar'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      const cb = activeDialog.onConfirm;
+                      setActiveDialog(null);
+                      if (cb) cb();
+                    }}
+                    className={`cursor-pointer basis-1/2 px-4 py-2 rounded-xl text-xs font-black transition-all ${getDialogAccentBtnClass()} font-sans`}
+                  >
+                    {activeDialog.confirmText || 'Aceptar'}
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    const cb = activeDialog.onConfirm;
+                    setActiveDialog(null);
+                    if (cb) cb();
+                  }}
+                  className={`cursor-pointer px-8 py-2 rounded-xl text-xs font-black transition-all min-w-[120px] ${getDialogAccentBtnClass()} font-sans`}
+                >
+                  {activeDialog.confirmText || 'Entendido'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Floating Simulated Phone Alert Dropdown */}
       {activeNotification && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-[#0a0f1d] border border-indigo-500/30 text-white rounded-2xl p-4 shadow-2xl z-50 flex items-start space-x-3 max-w-sm w-[90vw] animate-in slide-in-from-top duration-300">
@@ -775,7 +894,7 @@ export default function App() {
             <h1 className="text-xl font-bold tracking-tight text-white capitalize">
               {activeTab === 'panel' ? 'Panel de Control' : 
                activeTab === 'finance' ? 'Gestión de Finanzas' :
-               activeTab === 'gym' ? 'Rutinas de Gimnasio' :
+               activeTab === 'gym' ? 'Deporte & Atletismo' :
                activeTab === 'todo' ? 'Agenda & Tareas' :
                activeTab === 'habits' ? 'Hábitos Diarios' :
                activeTab === 'journal' ? 'Bitácora & Reflexión' : 'Ajustes Integrales'}
@@ -783,7 +902,7 @@ export default function App() {
             <p className="text-xs text-slate-400 mt-1">
               {activeTab === 'panel' && 'Vista general del rendimiento del día, ahorros, cotizaciones y accesos rápidos.'}
               {activeTab === 'finance' && 'Controla ingresos extra, gastos opcionales, vencimientos fijos y calendario.'}
-              {activeTab === 'gym' && 'Rutinas estructuradas, control de repeticiones, cargas y sobrecarga progresiva.'}
+              {activeTab === 'gym' && 'Planificación deportiva, salidas de running/bici, marcas personales e hipertrofia.'}
               {activeTab === 'todo' && 'Bloques de tiempo continuos y lista de pendientes para máxima productividad.'}
               {activeTab === 'habits' && 'Visualiza y registra tus hábitos diarios para mantener constancia.'}
               {activeTab === 'journal' && 'Escribe reflexiones sobre tu día, agradecimientos y metas futuras.'}
@@ -841,7 +960,7 @@ export default function App() {
             )}
   
             {activeTab === 'gym' && (
-              <GymModule
+              <DeporteModule
                 routines={routines}
                 onUpdateRoutines={setRoutines}
               />

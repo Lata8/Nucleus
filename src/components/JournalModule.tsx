@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { JournalEntry, Habit } from '../types';
 import { getLocalDateString } from '../utils/dateUtils';
+import { customAlert, customConfirm } from '../utils/customAlerts';
 
 interface JournalModuleProps {
   entries: JournalEntry[];
@@ -262,19 +263,24 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
     }
 
     onUpdateEntries(updatedEntries);
-    alert(`Entrada de bitácora para el ${selectedDate} guardada exitosamente.`);
+    customAlert(`Entrada de bitácora para el ${selectedDate} guardada exitosamente.`, 'success', 'Bitácora Guardada');
   };
 
   // Handle delete
   const handleDeleteEntry = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (window.confirm('¿Estás seguro de que deseas eliminar esta entrada de bitácora? Esta acción no se puede deshacer.')) {
-      const updated = entries.filter(item => item.id !== id);
-      onUpdateEntries(updated);
-      if (selectedEntryToView?.id === id) {
-        setSelectedEntryToView(null);
-      }
-    }
+    customConfirm(
+      '¿Estás seguro de que deseas eliminar esta entrada de bitácora? Esta acción no se puede deshacer.',
+      () => {
+        const updated = entries.filter(item => item.id !== id);
+        onUpdateEntries(updated);
+        if (selectedEntryToView?.id === id) {
+          setSelectedEntryToView(null);
+        }
+      },
+      undefined,
+      'Eliminar Entrada de Bitácora'
+    );
   };
 
   // Retrieve prompt suggestion
@@ -828,7 +834,7 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
                     e.preventDefault();
                     const trimmed = tempApiKey.trim();
                     if (!trimmed) {
-                      alert('Por favor ingresa una clave de API de Gemini válida.');
+                      customAlert('Por favor ingresa una clave de API de Gemini válida.', 'warning', 'Clave Requerida');
                       return;
                     }
                     localStorage.setItem('user_custom_gemini_key', trimmed);
@@ -879,11 +885,16 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
                   <button
                     type="button"
                     onClick={() => {
-                      if (window.confirm('¿Deseas desvincular tu clave de API de Gemini? Esto desactivará el Analista.')) {
-                        localStorage.removeItem('user_custom_gemini_key');
-                        setHasSavedKey(false);
-                        setTempApiKey('');
-                      }
+                      customConfirm(
+                        '¿Deseas desvincular tu clave de API de Gemini? Esto desactivará el Analista.',
+                        () => {
+                          localStorage.removeItem('user_custom_gemini_key');
+                          setHasSavedKey(false);
+                          setTempApiKey('');
+                        },
+                        undefined,
+                        'Desvincular Clave'
+                      );
                     }}
                     className="cursor-pointer text-slate-500 hover:text-rose-400 text-[10px] uppercase font-bold hover:bg-slate-950/60 border border-transparent hover:border-slate-800 py-2.5 px-3 rounded-xl transition-all"
                   >
@@ -959,10 +970,15 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
                 
                 <button
                   onClick={() => {
-                    if (window.confirm('¿Deseas vaciar el diagnóstico archivado?')) {
-                      setAnalysisResult(null);
-                      localStorage.removeItem('ai_reflection_analysis_result');
-                    }
+                    customConfirm(
+                      '¿Deseas vaciar el diagnóstico archivado?',
+                      () => {
+                        setAnalysisResult(null);
+                        localStorage.removeItem('ai_reflection_analysis_result');
+                      },
+                      undefined,
+                      'Vaciar Diagnóstico'
+                    );
                   }}
                   className="cursor-pointer text-red-500 hover:text-red-400 p-2 rounded-xl text-xs hover:bg-slate-900 border border-transparent hover:border-slate-800/80 transition-all"
                   title="Eliminar Reporte"

@@ -83,6 +83,7 @@ export interface TimeBlock {
   endTime: string; // HH:MM
   category: 'Trabajo' | 'Gimnasio' | 'Finanzas' | 'Ocio' | 'Descanso' | 'Comida';
   actualMinutesSpent?: number; // For time auditing
+  dayId?: string; // e.g. 'day-1', 'day-2', etc. (Monday to Sunday)
 }
 
 export interface ToDoTask {
@@ -143,3 +144,42 @@ export interface WeatherData {
   isRaining: boolean;
   city: string;
 }
+
+// --- Sports and Running/Cycling Module ---
+export interface SportScheduleItem {
+  id: string;
+  dayId: string; // 'day-1', 'day-2', etc.
+  sportName: string; // e.g. "Fútbol", "Básquet", "Tenis", "Natación", "Boxeo", "Otro"
+  time: string; // e.g. "20:00"
+  notes?: string;
+}
+
+export interface RunningCyclingDayPlan {
+  dayId: string; // 'day-1', 'day-2', etc.
+  dayName: string;
+  active: boolean;
+  time: string; // e.g. "08:00"
+  targetDuration: string; // e.g. "45 min"
+  targetDistance: number; // e.g. 5 (km)
+  activityType: 'Correr' | 'Bici';
+}
+
+export interface ActivityLog {
+  id: string;
+  type: 'Correr' | 'Bici';
+  date: string; // YYYY-MM-DD
+  duration: string; // e.g. "35 min", "1h 10m"
+  distance: number; // e.g. 5.2 (km)
+  feeling?: string; // e.g. "Excelente", "Cansado", "Rápido"
+  notes?: string;
+}
+
+export interface SpecialRecord {
+  id: string;
+  category: 'Correr' | 'Bici' | 'Gimnasio' | 'Fútbol' | 'Otro';
+  title: string; // e.g. "Mejor tiempo 5K", "Distancia más larga", "Mejor ritmo"
+  value: string; // e.g. "21m 45s", "12 km", "4:15 min/km"
+  date: string; // YYYY-MM-DD
+  description?: string;
+}
+

@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 3000);
 
 app.use(express.json());
 
@@ -138,8 +138,12 @@ function getLocalIp() {
 }
 
 async function startServer() {
-  // Vite middleware flow
-  if (process.env.NODE_ENV !== "production") {
+  // Robust production detection so it works reliably on Render
+  const isProd = process.env.NODE_ENV === "production" || 
+                 process.argv[1]?.endsWith("server.cjs") || 
+                 !process.argv[1]?.endsWith("server.ts");
+
+  if (!isProd) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",

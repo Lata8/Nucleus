@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { Habit } from '../types';
 import { getLocalDateString } from '../utils/dateUtils';
+import { customConfirm } from '../utils/customAlerts';
 
 interface HabitsModuleProps {
   habits: Habit[];
@@ -196,9 +197,14 @@ export default function HabitsModule({ habits, onUpdateHabits }: HabitsModulePro
 
   // Delete Habit
   const handleRemoveHabit = (id: string) => {
-    if (window.confirm('¿Deseas eliminar este hábito definitivamente? Se borrará su historial de rachas.')) {
-      onUpdateHabits(habits.filter(h => h.id !== id));
-    }
+    customConfirm(
+      '¿Deseas eliminar este hábito definitivamente? Se borrará su historial de rachas.',
+      () => {
+        onUpdateHabits(habits.filter(h => h.id !== id));
+      },
+      undefined,
+      'Eliminar Hábito'
+    );
   };
 
   // Begin edits
@@ -235,15 +241,20 @@ export default function HabitsModule({ habits, onUpdateHabits }: HabitsModulePro
 
   // Reset all habits history to start fresh
   const handleResetHistory = () => {
-    if (window.confirm('¿Estás seguro de blanquear todas tus rachas e historiales para empezar de cero estricto?')) {
-      const updated = habits.map(h => ({
-        ...h,
-        streak: 0,
-        bestStreak: 0,
-        history: {}
-      }));
-      onUpdateHabits(updated);
-    }
+    customConfirm(
+      '¿Estás seguro de blanquear todas tus rachas e historiales para empezar de cero estricto?',
+      () => {
+        const updated = habits.map(h => ({
+          ...h,
+          streak: 0,
+          bestStreak: 0,
+          history: {}
+        }));
+        onUpdateHabits(updated);
+      },
+      undefined,
+      'Reiniciar Historial de Hábitos'
+    );
   };
 
   // Stats calculation

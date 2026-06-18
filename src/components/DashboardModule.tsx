@@ -33,6 +33,8 @@ import {
   Flame
 } from 'lucide-react';
 import { Income, Expense, ExchangeRates, WeatherData, AppSettings, ToDoTask, Habit, FixedService } from '../types';
+import { getLocalDateString } from '../utils/dateUtils';
+import { customAlert } from '../utils/customAlerts';
 
 export const ARG_CITIES = [
   // --- Capitales y Grandes Centros ---
@@ -255,7 +257,7 @@ export default function DashboardModule({
           // Timer finished!
           setIsPomodoroActive(false);
           playPomodoroAlertChime();
-          alert("⏱️ ¡Tiempo cumplido! Tu bloque de enfoque Pomodoro ha finalizado con éxito. ¡Excelente esfuerzo!");
+          customAlert("⏱️ ¡Tiempo cumplido!\n\nTu bloque de enfoque Pomodoro ha finalizado con éxito.\n¡Excelente esfuerzo, sigue así!", "success", "Sesión de Enfoque");
         }
       }, 1000);
     }
@@ -311,9 +313,9 @@ export default function DashboardModule({
         emergencyFundEstimatedIncome: inputFundEstimatedIncome,
       });
       setIsEditingFund(false);
-      alert('Configuración de Reserva guardada con éxito.');
+      customAlert('Configuración de Reserva guardada con éxito.', 'success', 'Reserva Guardada');
     } else {
-      alert('Error de conexión a la base de datos de ajustes.');
+      customAlert('Error de conexión a la base de datos de ajustes.', 'error', 'Error');
     }
   };
 
@@ -496,15 +498,16 @@ export default function DashboardModule({
   }, [selectedCityName, useGeolocation, geoCoords]);
 
   // --- Calculations ---
-  // Count only incomes that are effective on or before today (June 8, 2026)
+  // Count only incomes that are effective on or before today
+  const todayStr = getLocalDateString();
   const activeIncomes = incomes.filter(inc => {
     if (!inc.date) return true;
-    return inc.date <= '2026-06-08';
+    return inc.date <= todayStr;
   });
 
   const pendingIncomes = incomes.filter(inc => {
     if (!inc.date) return false;
-    return inc.date > '2026-06-08';
+    return inc.date > todayStr;
   });
 
   const totalIncomeARS = activeIncomes.reduce((sum, inc) => {
