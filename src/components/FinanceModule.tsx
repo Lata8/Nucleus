@@ -527,19 +527,19 @@ export default function FinanceModule({
                 return (
                   <div 
                     key={w} 
-                    className={`p-3 rounded-2xl border text-center transition-all ${
+                    className={`p-3.5 rounded-2xl border text-center transition-all ${
                       isCurrentWeek 
-                        ? 'bg-amber-950/45 border-amber-500/50 ring-2 ring-amber-500/20' 
-                        : 'bg-slate-900/60 border-slate-800'
+                        ? 'bg-amber-950/60 border-amber-500 ring-2 ring-amber-500/35 shadow-lg' 
+                        : 'bg-[#131e32] border-slate-700/50 hover:bg-[#1a2942] hover:border-slate-500/80 shadow-md'
                     }`}
                   >
-                    <span className={`text-[10px] font-extrabold block uppercase ${isCurrentWeek ? 'text-amber-400' : 'text-slate-400'}`}>
+                    <span className={`text-[11px] font-black block uppercase tracking-wider ${isCurrentWeek ? 'text-amber-300' : 'text-white'}`}>
                       Semana {w} {isCurrentWeek ? '• Hoy' : ''}
                     </span>
-                    <span className={`text-[9px] font-mono block ${isCurrentWeek ? 'text-amber-500/80' : 'text-slate-500'}`}>
+                    <span className={`text-[10px] font-bold block mt-0.5 font-mono ${isCurrentWeek ? 'text-amber-400' : 'text-slate-300'}`}>
                       {w === 1 ? '1-7 Jun' : w === 2 ? '8-14 Jun' : w === 3 ? '15-21 Jun' : w === 4 ? '22-28 Jun' : '29-30 Jun'}
                     </span>
-                    <span className={`text-xs font-black block mt-1 font-mono ${isCurrentWeek ? 'text-amber-300' : 'text-emerald-400'}`}>
+                    <span className={`text-sm font-extrabold block mt-1.5 font-mono ${isCurrentWeek ? 'text-amber-200' : 'text-emerald-400'}`}>
                       ${Math.round(weeklySum).toLocaleString('es-AR')}
                     </span>
                   </div>
