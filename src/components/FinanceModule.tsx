@@ -477,7 +477,7 @@ export default function FinanceModule({
                         </span>
                         <button
                           onClick={() => onRemoveExpense(exp.id)}
-                          className="text-red-500 hover:text-red-400 p-1 cursor-pointer"
+                          className="p-1.5 bg-[#170e11] border border-rose-955/20 text-rose-500 hover:text-rose-400 hover:bg-[#251015]/90 hover:border-rose-500/30 rounded-lg transition-all cursor-pointer shadow-sm active:scale-95 flex items-center justify-center"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -791,7 +791,7 @@ export default function FinanceModule({
                         </span>
                         <button
                           onClick={() => onRemoveIncome(inc.id)}
-                          className="text-red-500 hover:text-red-400 p-1 cursor-pointer"
+                          className="p-1.5 bg-[#170e11] border border-rose-955/20 text-rose-500 hover:text-rose-400 hover:bg-[#251015]/90 hover:border-rose-500/30 rounded-lg transition-all cursor-pointer shadow-sm active:scale-95 flex items-center justify-center"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -934,7 +934,7 @@ export default function FinanceModule({
                           />
                           <button
                             onClick={() => onRemoveService(ser.id)}
-                            className="text-red-500 hover:text-red-400 p-1 cursor-pointer"
+                            className="p-1.5 bg-[#170e11] border border-rose-955/20 text-rose-500 hover:text-rose-450 hover:bg-[#251015]/90 hover:border-rose-500/30 rounded-lg transition-all cursor-pointer shadow-sm active:scale-95 flex items-center justify-center"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>

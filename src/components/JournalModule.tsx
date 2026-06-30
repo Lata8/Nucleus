@@ -630,7 +630,7 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
                   
                   <button
                     onClick={() => handleDeleteEntry(selectedEntryToView.id)}
-                    className="cursor-pointer bg-red-950/30 border border-red-900/40 text-red-400 hover:text-red-300 p-2 rounded-xl transition-all"
+                    className="cursor-pointer bg-[#170e11] border border-rose-955/20 text-rose-500 hover:text-rose-450 hover:bg-[#251015]/90 hover:border-rose-500/30 p-2 rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center"
                     title="Eliminar registro"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -980,7 +980,7 @@ export default function JournalModule({ entries, onUpdateEntries, habits }: Jour
                       'Vaciar Diagnóstico'
                     );
                   }}
-                  className="cursor-pointer text-red-500 hover:text-red-400 p-2 rounded-xl text-xs hover:bg-slate-900 border border-transparent hover:border-slate-800/80 transition-all"
+                  className="cursor-pointer p-2 bg-[#170e11] border border-rose-955/20 text-rose-500 hover:text-rose-450 hover:bg-[#251015]/90 hover:border-rose-500/30 rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center"
                   title="Eliminar Reporte"
                 >
                   <Trash2 className="w-4 h-4" />

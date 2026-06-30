@@ -123,6 +123,67 @@ Por favor, bríndame un análisis personalizado de crecimiento.`;
   }
 });
 
+app.post("/api/growth/blueprint", async (req, res) => {
+  try {
+    const { focus, userName = "Elías", stats = {} } = req.body;
+    const userKey = req.headers["x-user-api-key"] as string | undefined;
+
+    const client = getGeminiClient(userKey);
+
+    const focusTitles: { [key: string]: string } = {
+      alto_rendimiento: "Deportista de Élite (Alto Rendimiento Físico)",
+      libertad_financiera: "Libertad Financiera (Control de Riqueza y Presupuesto)",
+      mente_acero: "Mente de Acero (Disciplina Estoica, Enfoque y Hábitos)",
+      salud_vitalidad: "Nutrición & Vitalidad (Optimización de Energía y Nutrientes)"
+    };
+
+    const selectedFocusTitle = focusTitles[focus] || "Superación Integral";
+
+    const systemPrompt = `Eres el "Mentor Supremo de Crecimiento y Disciplina" del usuario.
+Tu filosofía está inspirada en grandes mentores de alto rendimiento, filosofía estoica (Séneca, Marco Aurelio), optimización neurobiológica (Andrew Huberman) y disciplina táctica (Jocko Willink, James Clear).
+Tu misión es guiar al usuario hacia su mejor versión absoluta en base a su enfoque elegido de vida y sus estadísticas actuales. No das consejos vagos; das pautas concisas, ultra-memorables, de alto impacto y basadas en sistemas.
+
+Estructura de respuesta obligatoria (en hermoso Markdown):
+1. **🔥 VISIÓN DE CAMPEÓN**: Un párrafo breve de gran impacto que encienda su fuego interno y valide su enfoque elegido.
+2. **🧬 DIAGNÓSTICO DE SISTEMAS**: Analiza brevemente las estadísticas provistas (hábitos, tareas, finanzas) en relación con su enfoque.
+3. **🎯 EL PLAN DE BATALLA (3 PASOS DEL 1%)**: Tres acciones concretas que el usuario debe ejecutar esta misma semana. Deben ser micro-pasos específicos (acciones obvias de 2 minutos que escalen).
+4. **💪 DECLARACIÓN DE PODER**: Una sola oración final, en negritas, extremadamente inspiradora e inquebrantable.
+
+Reglas:
+- Sé directo, humilde, pero sumamente enérgico y persuasivo.
+- Usa terminología de excelencia (sistemas, fricción, apilamiento, hábitos atómicos).
+- Idioma: Español.`;
+
+    const userPrompt = `Hola Mentor. Mi nombre es ${userName} y mi enfoque actual de superación es: "${selectedFocusTitle}".
+
+Aquí están algunas de mis estadísticas de la plataforma actuales para tu análisis:
+- Tareas en mi agenda: ${stats.totalTasks || 0} registradas (${stats.completedTasks || 0} completadas, ${stats.failedTasks || 0} sin cumplir).
+- Hábitos activos: ${stats.totalHabits || 0} hábitos programados. Racha máxima de hábitos activa: ${stats.maxHabitStreak || 0} días.
+- Balance Financiero Estimado: Ingresos de $${stats.totalIncomes || 0} ARS y Gastos de $${stats.totalExpenses || 0} ARS.
+
+Por favor, genera mi Plan de Batalla personalizado de Superación Personal para esta semana.`;
+
+    const response = await client.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: userPrompt,
+      config: {
+        systemInstruction: systemPrompt,
+        temperature: 0.8,
+      },
+    });
+
+    res.json({
+      blueprint: response.text || "No se pudo generar el plan de batalla. Inténtalo de nuevo.",
+    });
+  } catch (error: any) {
+    console.error("Gemini server blueprint error:", error);
+    res.status(500).json({
+      error: "Error al generar tu plan de batalla por IA.",
+      details: error.message || String(error),
+    });
+  }
+});
+
 import os from "os";
 
 function getLocalIp() {

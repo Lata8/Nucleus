@@ -35,6 +35,7 @@ import {
 import { Income, Expense, ExchangeRates, WeatherData, AppSettings, ToDoTask, Habit, FixedService } from '../types';
 import { getLocalDateString } from '../utils/dateUtils';
 import { customAlert } from '../utils/customAlerts';
+import GrowthCore from './GrowthCore';
 
 export const ARG_CITIES = [
   // --- Capitales y Grandes Centros ---
@@ -682,6 +683,16 @@ export default function DashboardModule({
           </div>
         </div>
       </div>
+
+      {/* NÚCLEO DE SUPERACIÓN PERSONAL & AUTO-MEJORA */}
+      <GrowthCore
+        userName={userName || 'Elías'}
+        tasks={tasks}
+        habits={habits}
+        incomes={incomes}
+        expenses={expenses}
+        onNavigate={onNavigate}
+      />
 
       {/* Weather Widget */}
       <div className="grid grid-cols-1 gap-4" id="api-widgets-grid">

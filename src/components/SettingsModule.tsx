@@ -5,30 +5,18 @@
 
 import React, { useState } from 'react';
 import { 
-  Sliders, 
   Check, 
   Layout, 
-  Palette,
-  Type,
-  Sparkles,
-  Award,
-  Key,
-  Eye,
-  EyeOff,
+  Key, 
+  Eye, 
+  EyeOff, 
   ShieldCheck,
-  Globe
 } from 'lucide-react';
 import { customAlert } from '../utils/customAlerts';
 
 interface SettingsModuleProps {
   appName: string;
   onUpdateAppName: (name: string) => void;
-  accentColor: 'indigo' | 'emerald' | 'amber' | 'rose';
-  onUpdateAccentColor: (color: 'indigo' | 'emerald' | 'amber' | 'rose') => void;
-  fontFamily: 'inter' | 'grotesk' | 'mono';
-  onUpdateFontFamily: (font: 'inter' | 'grotesk' | 'mono') => void;
-  appStyle: 'ia' | 'rich';
-  onUpdateAppStyle: (style: 'ia' | 'rich') => void;
   userName: string;
   onUpdateUserName: (name: string) => void;
 }
@@ -36,12 +24,6 @@ interface SettingsModuleProps {
 export default function SettingsModule({
   appName,
   onUpdateAppName,
-  accentColor,
-  onUpdateAccentColor,
-  fontFamily,
-  onUpdateFontFamily,
-  appStyle,
-  onUpdateAppStyle,
   userName,
   onUpdateUserName,
 }: SettingsModuleProps) {
@@ -145,110 +127,6 @@ export default function SettingsModule({
             Guardar Configuración de Identidad
           </button>
         </form>
-
-        {/* Color Palletes Accent */}
-        <div className="space-y-3 pt-2">
-          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block flex items-center gap-1.5">
-            <Palette className="w-3.5 h-3.5" />
-            <span>Gama de Luces y Contornos (Neon Accents)</span>
-          </span>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            {[
-              { id: 'indigo', name: 'Giga Indigo', color: 'bg-indigo-650' },
-              { id: 'emerald', name: 'Láser Verde', color: 'bg-emerald-600' },
-              { id: 'amber', name: 'Naranja Sol', color: 'bg-amber-500' },
-              { id: 'rose', name: 'Eva Carmesí', color: 'bg-rose-600' },
-            ].map((theme) => (
-              <button
-                key={theme.id}
-                onClick={() => onUpdateAccentColor(theme.id as any)}
-                className={`cursor-pointer p-3 rounded-2xl border transition-all text-center flex flex-col items-center justify-center ${
-                  accentColor === theme.id 
-                    ? 'border-indigo-550 bg-indigo-950/40 text-white font-black scale-[1.02]' 
-                    : 'border-slate-800 bg-[#070c18]/45 text-slate-400 hover:text-slate-200 hover:bg-[#070c18]'
-                }`}
-              >
-                <div className={`w-5 h-5 rounded-full ${theme.color} mb-1.5 shadow-md border border-white/10`}></div>
-                <span className="text-[10px] font-bold block truncate w-full">{theme.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Style Selection Mode */}
-        <div className="space-y-3 pt-2">
-          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Modo de Estilo de la Interfaz (Visual Mode)</span>
-          </span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => onUpdateAppStyle('ia')}
-              className={`cursor-pointer p-4 rounded-2xl border transition-all text-left flex flex-col justify-between min-h-[90px] ${
-                appStyle === 'ia'
-                  ? 'border-indigo-500 bg-indigo-950/40 text-white font-black scale-[1.01] shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                  : 'border-slate-800 bg-[#070c18]/45 text-slate-400 hover:text-slate-200 hover:bg-[#070c18]'
-              }`}
-            >
-              <div className="flex justify-between items-start w-full">
-                <span className="text-xs font-extrabold uppercase tracking-wider block">Estilo IA (Ciber-Sleek)</span>
-                {appStyle === 'ia' && <Check className="w-4 h-4 text-indigo-400 shrink-0 select-none" />}
-              </div>
-              <p className="text-[10px] text-slate-500 leading-normal font-medium mt-1">
-                Líneas técnicas ciber-slate, contrastes mínimos refinados y estética limpia de laboratorio de datos.
-              </p>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onUpdateAppStyle('rich')}
-              className={`cursor-pointer p-4 rounded-2xl border transition-all text-left flex flex-col justify-between min-h-[90px] ${
-                appStyle === 'rich'
-                  ? 'border-fuchsia-500 bg-fuchsia-950/30 text-white font-black scale-[1.01] shadow-[0_0_15px_rgba(217,70,239,0.2)]'
-                  : 'border-slate-800 bg-[#070c18]/45 text-slate-400 hover:text-slate-200 hover:bg-[#070c18]'
-              }`}
-            >
-              <div className="flex justify-between items-start w-full">
-                <span className="text-xs font-extrabold uppercase tracking-wider block text-fuchsia-400">Estilo Rich (Luxe Glass)</span>
-                {appStyle === 'rich' && <Check className="w-4 h-4 text-fuchsia-400 shrink-0 select-none" />}
-              </div>
-              <p className="text-[10px] text-purple-400/80 leading-normal font-medium mt-1">
-                Opulencia con degradados cromáticos, vidrio esmerilado medianoche, bordes dorados/bronce y animaciones infladas.
-              </p>
-            </button>
-          </div>
-        </div>
-
-        {/* Letter atmospheric fonts */}
-        <div className="space-y-3 pt-2">
-          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block flex items-center gap-1.5">
-            <Type className="w-3.5 h-3.5" />
-            <span>Atmósfera de Letras (Familia de Tipografías)</span>
-          </span>
-          <div className="grid grid-cols-3 gap-2.5">
-            {[
-              { id: 'inter', name: 'Sans Clásico', desc: 'Inter UI' },
-              { id: 'grotesk', name: 'Tech Displays', desc: 'Space Grotesk' },
-              { id: 'mono', name: 'Terminal Dev', desc: 'JetBrains Mono' },
-            ].map((style) => (
-              <button
-                key={style.id}
-                onClick={() => onUpdateFontFamily(style.id as any)}
-                className={`cursor-pointer p-3 rounded-2xl border transition-all text-center flex flex-col justify-between items-center ${
-                  fontFamily === style.id 
-                    ? 'border-indigo-550 bg-indigo-950/40 text-white font-black scale-[1.02]' 
-                    : 'border-slate-800 bg-[#070c18]/45 text-slate-400 hover:text-slate-200 hover:bg-[#070c18]'
-                }`}
-              >
-                <span className={`text-base tracking-tight mb-1 font-bold ${style.id === 'mono' ? 'font-mono' : style.id === 'grotesk' ? 'font-sans' : 'font-sans'}`}>
-                  Aa
-                </span>
-                <span className="text-[9.5px] font-semibold block mt-1">{style.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* AI & Gemini Configuration (Bring Your Own Key paradigm) */}
         <div className="space-y-4 pt-4 border-t border-slate-800/80">

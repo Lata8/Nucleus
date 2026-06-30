@@ -207,17 +207,9 @@ export default function App() {
 
   const [tempPromptName, setTempPromptName] = useState('');
 
-  const [accentColor, setAccentColor] = useState<'indigo' | 'emerald' | 'amber' | 'rose'>(() => {
-    return (localStorage.getItem('control_personal_accent_color') as any) || 'indigo';
-  });
-
-  const [fontFamily, setFontFamily] = useState<'inter' | 'grotesk' | 'mono'>(() => {
-    return (localStorage.getItem('control_personal_font_family') as any) || 'grotesk';
-  });
-
-  const [appStyle, setAppStyle] = useState<'ia' | 'rich'>(() => {
-    return (localStorage.getItem('control_personal_app_style') as any) || 'ia';
-  });
+  const accentColor = 'indigo' as 'indigo' | 'emerald' | 'amber' | 'rose';
+  const fontFamily = 'grotesk' as 'inter' | 'grotesk' | 'mono';
+  const appStyle = 'ia' as 'ia' | 'rich';
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -416,18 +408,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('control_personal_user_name', userName);
   }, [userName]);
-
-  useEffect(() => {
-    localStorage.setItem('control_personal_accent_color', accentColor);
-  }, [accentColor]);
-
-  useEffect(() => {
-    localStorage.setItem('control_personal_font_family', fontFamily);
-  }, [fontFamily]);
-
-  useEffect(() => {
-    localStorage.setItem('control_personal_app_style', appStyle);
-  }, [appStyle]);
 
   useEffect(() => {
     localStorage.setItem('control_personal_settings', JSON.stringify(settings));
@@ -1060,12 +1040,6 @@ export default function App() {
               <SettingsModule
                 appName={appName}
                 onUpdateAppName={setAppName}
-                accentColor={accentColor}
-                onUpdateAccentColor={setAccentColor}
-                fontFamily={fontFamily}
-                onUpdateFontFamily={setFontFamily}
-                appStyle={appStyle}
-                onUpdateAppStyle={setAppStyle}
                 userName={userName}
                 onUpdateUserName={setUserName}
               />
